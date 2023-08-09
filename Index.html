@@ -26,8 +26,26 @@
         const ballRadius = 10;
         const paddleHeight = 10;
         const paddleWidth = 60;
+        const brickRowCount = 4;
+        const brickColumnCount = 8;
+        const brickWidth = 80;
+        const brickHeight = 25;
+        const brickPadding = 15;
+        const brickOffsetTop = 30;
+        const brickOffsetLeft = 30;
         const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        const interval = setInterval(draw, 10);
         
+        
+        const bricks = [];
+        for (let c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < brickColumnCount; r++) {
+                bricks[c][r] = {x: 0, y: 0};
+            }
+        }
+        
+
         let rightPressed = false;
         let leftPressed = false;
         let paddleX = (canvas.width - paddleWidth) / 2;
@@ -35,7 +53,6 @@
         let dy = -4;
         let x = canvas.width / 2;
         let y = canvas.height - 30;
-        const interval = setInterval(draw, 10);
         
 
         function drawBall() {
@@ -45,7 +62,7 @@
             ctx.fill();
             ctx.closePath();
         }
-
+        
         function drawPaddle() {
             ctx.beginPath();
             ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
@@ -54,13 +71,31 @@
             ctx.closePath();
         }
 
+        function drawBricks(){
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                    const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                    bricks[c][r].x = brickX;
+                    bricks[c][r].y = brickY;
+                    ctx.beginPath();
+                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                    ctx.fillStyle = "red";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                
+            }
+        }
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            drawPaddle();
             drawBall();
+            drawBricks();
+            drawPaddle();
             x += dx;
             y += dy;
-            
+
             if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
                 dx = -dx;
             }
