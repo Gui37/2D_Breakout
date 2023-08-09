@@ -41,7 +41,7 @@
         for (let c = 0; c < brickColumnCount; c++) {
             bricks[c] = [];
             for (let r = 0; r < brickColumnCount; r++) {
-                bricks[c][r] = {x: 0, y: 0};
+                bricks[c][r] = {x: 0, y: 0, status : 1};
             }
         }
         
@@ -74,6 +74,7 @@
         function drawBricks(){
             for (let c = 0; c < brickColumnCount; c++) {
                 for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {       
                     const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
                     const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
                     bricks[c][r].x = brickX;
@@ -83,16 +84,17 @@
                     ctx.fillStyle = "red";
                     ctx.fill();
                     ctx.closePath();
+                    }
                 }
-                
             }
         }
-
+        
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             drawBall();
             drawBricks();
             drawPaddle();
+            collisionDetection();
             x += dx;
             y += dy;
 
@@ -129,6 +131,23 @@
                 leftPressed = true;
             }
         }
+        
+        function collisionDetection(){
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    const b = bricks[c][r];
+                    if (b.status === 1) {
+                        if (x > b.x && 
+                        x < b.x + brickWidth && 
+                        y > b.y &&
+                        y < b.y + brickHeight) {
+                            dy = -dy; 
+                            b.status = 0                       
+                        }
+                    }
+                }
+            }
+        }
 
         function keyUpHandler(e){
             if (e.key === "Right" || e.key === "ArrowRight") {
@@ -137,6 +156,7 @@
                 leftPressed = false;
             }
         }
+
 
     </script>
 </body>
