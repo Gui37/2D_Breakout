@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title> Gamedev Canvas Workshop</title>
-        <style>
-            * {
-                padding: 0;
-                margin: 0;
-            }
-            canvas {
-                background: #eee;
-                display:block;
-                margin: 0 auto;
-            }
-        </style>
-    </head>
-    <body>
-        <canvas id="myCanvas" width="800" height="400"></canvas>
-        <script>
-            const canvas =  document.getElementById("myCanvas");
-            const ctx = canvas.getContext("2d");
 
-            let dx = -2;
-            let dy = -2;
-            let x = canvas.width / 2;
-            let y = canvas.height - 30;
-            
-            function drawBall(){
-                ctx.beginPath();
-                ctx.arc(x,y,10,0,Math.PI*2);
-                ctx.fillStyle = "blue";
-                ctx.fill();
-                ctx.closePath();
+<head>
+    <meta charset="utf-8" />
+    <title> Gamedev Canvas Workshop</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        const ballRadius = 10;
+        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        
+        let dx = -4;
+        let dy = -4;
+        let x = canvas.width / 2;
+        let y = canvas.height - 30;
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            drawBall();
+            x += dx;
+            y += dy;
+            if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+                dx = -dx;
             }
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-                drawBall();
-                x += dx;
-                y += dy;
+
+            if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+                dy = -dy;
             }
-            setInterval(draw, 10);
-        </script>
-    </body>
+        }
+        setInterval(draw, 10);
+    </script>
+</body>
+
 </html>
