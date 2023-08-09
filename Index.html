@@ -45,7 +45,7 @@
             }
         }
         
-
+        let score = 0;
         let rightPressed = false;
         let leftPressed = false;
         let paddleX = (canvas.width - paddleWidth) / 2;
@@ -94,6 +94,7 @@
             drawBall();
             drawBricks();
             drawPaddle();
+            drawScore();
             collisionDetection();
             x += dx;
             y += dy;
@@ -108,7 +109,7 @@
                 if (x > paddleX && x < paddleX + paddleWidth) {
                    dy =-dy; 
                 } else {   
-                    alert("Game Over Bro");
+                    alert(`Game Over Bro with ${score}`);
                     document.location.reload();
                     clearInterval(interval); //because of chrome
                 }
@@ -142,11 +143,23 @@
                         y > b.y &&
                         y < b.y + brickHeight) {
                             dy = -dy; 
-                            b.status = 0                       
+                            b.status = 0;
+                            score++;  
+                            if (score === brickRowCount * brickColumnCount) {
+                                alert(`Parabéns, Você venceu com ${score} Pontos`);
+                                document.location.reload();
+                                clearInterval(interval); //because of chrome
+                            }
                         }
                     }
                 }
             }
+        }
+
+        function drawScore(){
+            ctx.font = "17px Arial";
+            ctx.fillStylee = "blue";
+            ctx.fillText(`Pontuação: ${score}`, 8, 20);
         }
 
         function keyUpHandler(e){
