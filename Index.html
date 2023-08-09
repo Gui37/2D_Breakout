@@ -15,7 +15,7 @@
             display: block;
             margin: 0 auto;
         }
-    </style>
+        </style>
 </head>
 
 <body>
@@ -35,7 +35,8 @@
         let dy = -4;
         let x = canvas.width / 2;
         let y = canvas.height - 30;
-
+        const interval = setInterval(draw, 10);
+        
 
         function drawBall() {
             ctx.beginPath();
@@ -52,18 +53,28 @@
             ctx.fill();
             ctx.closePath();
         }
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             drawPaddle();
             drawBall();
             x += dx;
             y += dy;
+            
             if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
                 dx = -dx;
             }
 
-            if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+            if (y + dy < ballRadius) {
                 dy = -dy;
+            } else if (y + dy > canvas.height - ballRadius) {
+                if (x > paddleX && x < paddleX + paddleWidth) {
+                   dy =-dy; 
+                } else {   
+                    alert("Game Over Bro");
+                    document.location.reload();
+                    clearInterval(interval); //because of chrome
+                }
             }
 
             if (rightPressed) {
@@ -92,7 +103,6 @@
             }
         }
 
-        setInterval(draw, 10);
     </script>
 </body>
 
